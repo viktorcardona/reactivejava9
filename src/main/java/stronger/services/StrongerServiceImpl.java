@@ -26,7 +26,7 @@ import io.reactivex.functions.BiFunction;
 
 public class StrongerServiceImpl implements StrongerService {
 
-	private static final String HISTORY_RATE_BASE_END_POINT = "http://api.fixer.io/%slatest?base=%s";
+	private static final String HISTORY_RATE_BASE_END_POINT = "http://data.fixer.io/api/%s?base=%s&access_key=%s";
 	private static final String DATE_FORMAT = "yyyy-MM-dd";
 
 	private ExchangeRatesAdapter ratesAdapter;
@@ -37,11 +37,11 @@ public class StrongerServiceImpl implements StrongerService {
 		this.ratesAdapter = exchangeRatesAdapter;
 	}
 
-	public Single<Boolean> isStronger(final String baseCurrency, final String counterCurrency) {
+	public Single<Boolean> isStronger(final String baseCurrency, final String counterCurrency, final String accessKey) {
 
 		return Observable.zip(
-				ratesAdapter.getExchangeRates(baseCurrency).toObservable(), 
-				yesterdayRate(baseCurrency), 
+				ratesAdapter.getExchangeRates(baseCurrency, accessKey).toObservable(),
+				yesterdayRate(baseCurrency, accessKey),
 				new BiFunction<ExchangeRatesResponse, ExchangeRatesResponse, Boolean>() {
 					public Boolean apply(ExchangeRatesResponse t1, ExchangeRatesResponse t2) throws Exception {
 
@@ -57,7 +57,7 @@ public class StrongerServiceImpl implements StrongerService {
 		}).toSingle();
 	}
 
-	private Observable<ExchangeRatesResponse> yesterdayRate(final String baseCurrency) {
+	private Observable<ExchangeRatesResponse> yesterdayRate(final String baseCurrency, final String accessKey) {
 		
 		return Observable.create(new ObservableOnSubscribe<ExchangeRatesResponse>() {
 
@@ -65,7 +65,7 @@ public class StrongerServiceImpl implements StrongerService {
 				
 				try {
 					String yesterdaysDate = getYesterdaysDateFormatted();
-					String endPoint = String.format(HISTORY_RATE_BASE_END_POINT, yesterdaysDate, baseCurrency);
+					String endPoint = String.format(HISTORY_RATE_BASE_END_POINT, yesterdaysDate, baseCurrency, accessKey);
 		    		URL obj = new URL(endPoint);
 		    		
 		    		HttpURLConnection con = (HttpURLConnection) obj.openConnection();

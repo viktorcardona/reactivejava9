@@ -17,8 +17,8 @@ public class ExchangeRatesServiceImpl implements ExchangeRatesService {
 		this.exchangeRatesAdapter = exchangeRatesAdapter;
 	}
 	
-	public Single<ExchangeRatesResponse> getExchangeRates(final String base) {
+	public Single<ExchangeRatesResponse> getExchangeRates(final String base, final String accessKey) {
 		
-		return exchangeRatesAdapter.getExchangeRates(base);
+		return exchangeRatesAdapter.getExchangeRates(base, accessKey);
 	}	
 }

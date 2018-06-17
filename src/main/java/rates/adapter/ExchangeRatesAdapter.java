@@ -18,16 +18,16 @@ import exceptions.InternalErrorException;
 
 public class ExchangeRatesAdapter {
 
-	private static final String EXCHANGE_RATE_BASE_END_POINT = "http://api.fixer.io/latest?base=%s";
+	private static final String EXCHANGE_RATE_BASE_END_POINT = "http://data.fixer.io/api/latest?base=%s&access_key=%s";
 
-	public Single<ExchangeRatesResponse> getExchangeRates(final String base) {
+	public Single<ExchangeRatesResponse> getExchangeRates(final String base, final String accessKey) {
 		
 		return Single.create(new SingleOnSubscribe<ExchangeRatesResponse>() {
 
 			public void subscribe(SingleEmitter<ExchangeRatesResponse> subscriber) {
 				
 				try {
-					String endPoint = String.format(EXCHANGE_RATE_BASE_END_POINT, base);
+					String endPoint = String.format(EXCHANGE_RATE_BASE_END_POINT, base, accessKey);
 		    		URL obj = new URL(endPoint);
 		    		
 		    		HttpURLConnection con = (HttpURLConnection) obj.openConnection();

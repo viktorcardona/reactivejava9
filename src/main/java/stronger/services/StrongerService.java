@@ -4,5 +4,5 @@ import io.reactivex.Single;
 
 public interface StrongerService {
 
-	Single<Boolean> isStronger(String baseCurrency, String counterCurrency);
+	Single<Boolean> isStronger(String baseCurrency, String counterCurrency, String accessKey);
 }

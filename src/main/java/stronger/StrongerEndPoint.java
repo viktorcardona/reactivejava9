@@ -24,7 +24,7 @@ import exceptions.InternalErrorException;
 import stronger.responses.StrongerResponse;
 import stronger.services.StrongerService;
 
-@Path("stronger/{baseCurrency}/{counterCurrency}")
+@Path("stronger/{baseCurrency}/{counterCurrency}/{accessKey}")
 public class StrongerEndPoint {
 
 	@Autowired
@@ -35,13 +35,14 @@ public class StrongerEndPoint {
     @ManagedAsync
     public void getRates(@Suspended final AsyncResponse async, 
     		@PathParam("baseCurrency") final String baseCurrency,
-    		@PathParam("counterCurrency") final String counterCurrency) {
+    		@PathParam("counterCurrency") final String counterCurrency,
+			@PathParam("accessKey") final String accessKey) {
     	
     	final StrongerResponse response = new StrongerResponse();
     	
     	final CountDownLatch outerLatch = new CountDownLatch(1);
     	
-    	strongerService.isStronger(baseCurrency, counterCurrency).subscribe(new SingleObserver<Boolean>() {
+    	strongerService.isStronger(baseCurrency, counterCurrency, accessKey).subscribe(new SingleObserver<Boolean>() {
 
 			public void onSubscribe(Disposable d) {}
 

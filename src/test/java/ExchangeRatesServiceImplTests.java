@@ -30,6 +30,7 @@ public class ExchangeRatesServiceImplTests {
 	private ExchangeRatesServiceImpl sut;
 	private String baseCurrency = "EUR";
 	private String counterCurrency = "USD";
+	private String accessKey = "";
 
 	@Before
 	public void setup() {
@@ -50,11 +51,11 @@ public class ExchangeRatesServiceImplTests {
 		
 		ExchangeRatesResponse expectedResponse = createResponse();
 		
-		doReturn(Single.just(expectedResponse)).when(mockAdapter).getExchangeRates(baseCurrency);
+		doReturn(Single.just(expectedResponse)).when(mockAdapter).getExchangeRates(baseCurrency, accessKey);
 		
 		TestSubscriber<ExchangeRatesResponse> testSubscriber = new TestSubscriber<ExchangeRatesResponse>();
 		
-		sut.getExchangeRates(baseCurrency).toFlowable().subscribe(testSubscriber);
+		sut.getExchangeRates(baseCurrency, accessKey).toFlowable().subscribe(testSubscriber);
 		
 		testSubscriber.assertValue(expectedResponse);
 	}
@@ -62,11 +63,11 @@ public class ExchangeRatesServiceImplTests {
 	@Test
 	public void testSadPath() {
 				
-		doReturn(Single.error(new InternalErrorException())).when(mockAdapter).getExchangeRates(baseCurrency);
+		doReturn(Single.error(new InternalErrorException())).when(mockAdapter).getExchangeRates(baseCurrency, accessKey);
 		
 		TestSubscriber<ExchangeRatesResponse> testSubscriber = new TestSubscriber<ExchangeRatesResponse>();
 		
-		sut.getExchangeRates(baseCurrency).toFlowable().subscribe(testSubscriber);
+		sut.getExchangeRates(baseCurrency, accessKey).toFlowable().subscribe(testSubscriber);
 		
 		testSubscriber.assertError(InternalErrorException.class);
 	}
@@ -74,11 +75,11 @@ public class ExchangeRatesServiceImplTests {
 	@Test
 	public void testSubscription() {
 		
-		doReturn(Single.never()).when(mockAdapter).getExchangeRates(baseCurrency);
+		doReturn(Single.never()).when(mockAdapter).getExchangeRates(baseCurrency, accessKey);
 		
 		TestSubscriber<ExchangeRatesResponse> testSubscriber = new TestSubscriber<ExchangeRatesResponse>();
 		
-		sut.getExchangeRates(baseCurrency).toFlowable().subscribe(testSubscriber);
+		sut.getExchangeRates(baseCurrency, accessKey).toFlowable().subscribe(testSubscriber);
 		
 		testSubscriber.assertSubscribed();
 	}
@@ -88,11 +89,11 @@ public class ExchangeRatesServiceImplTests {
 		
 		ExchangeRatesResponse expectedResponse = createResponse();
 		
-		doReturn(Single.just(expectedResponse)).when(mockAdapter).getExchangeRates(baseCurrency);
+		doReturn(Single.just(expectedResponse)).when(mockAdapter).getExchangeRates(baseCurrency, accessKey);
 		
 		TestSubscriber<ExchangeRatesResponse> testSubscriber = new TestSubscriber<ExchangeRatesResponse>();
 		
-		sut.getExchangeRates(baseCurrency).toFlowable().subscribe(testSubscriber);
+		sut.getExchangeRates(baseCurrency, accessKey).toFlowable().subscribe(testSubscriber);
 		
 		testSubscriber.assertComplete();
 	}

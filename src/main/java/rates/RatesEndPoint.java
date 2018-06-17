@@ -25,7 +25,7 @@ import exceptions.InternalErrorException;
 import rates.responses.RateResponse;
 import rates.services.ExchangeRatesService;
 
-@Path("rates/{baseCurrency}/{counterCurrency}")
+@Path("rates/{baseCurrency}/{counterCurrency}/{accessKey}")
 public class RatesEndPoint {
 	
 	@Autowired
@@ -36,12 +36,13 @@ public class RatesEndPoint {
     @ManagedAsync
     public void getRates(@Suspended final AsyncResponse async, 
     		@PathParam("baseCurrency") final String baseCurrency,
-    		@PathParam("counterCurrency") final String counterCurrency) {
+    		@PathParam("counterCurrency") final String counterCurrency,
+			@PathParam("accessKey") final String accessKey) {
     	
     	final RateResponse response = new RateResponse();
     	final CountDownLatch outerLatch = new CountDownLatch(1);
     	
-    	exchangeRatesService.getExchangeRates(baseCurrency)
+    	exchangeRatesService.getExchangeRates(baseCurrency, accessKey)
     	.subscribe(new SingleObserver<ExchangeRatesResponse>() {
 
 			public void onSubscribe(Disposable d) {}
